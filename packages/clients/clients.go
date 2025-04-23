@@ -57,7 +57,7 @@ func SetupClients(cfg config.ReplayorConfig, logger log.Logger, ctx context.Cont
 			return nil, err
 		}
 
-		engineApi := sources.NewEngineAPIClientWithTimeout(l2Node, logger, cfg.RollupConfig, 10*time.Minute)
+		engineApi := sources.NewEngineAPIClient(l2Node, logger, cfg.RollupConfig)
 
 		return engineApi, nil
 	})

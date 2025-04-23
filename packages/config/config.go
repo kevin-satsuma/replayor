@@ -48,12 +48,18 @@ func valueOrNil(i *uint64) string {
 }
 
 func LoadReplayorConfig(cliCtx *cli.Context, l log.Logger) (ReplayorConfig, error) {
-	secret := cliCtx.String(EngineApiSecret.Name)
-	if secret == "" {
+	secretPath := cliCtx.String(EngineApiSecret.Name)
+	if secretPath == "" {
 		return ReplayorConfig{}, fmt.Errorf("must provide REPLAYOR_ENGINE_API_SECRET env var")
 	}
 
-	secretHash := common.HexToHash(strings.TrimSpace(secret))
+	secretBytes, err := os.ReadFile(secretPath)
+	if err != nil {
+		return ReplayorConfig{}, fmt.Errorf("failed to read secret file: %w", err)
+	}
+
+	secretHash := common.HexToHash(strings.TrimSpace(string(secretBytes)))
+	l.Info("loaded engine api secret", "secretHash", secretHash)
 
 	chainId := cliCtx.String(ChainId.Name)
 	rollupCfgPath := cliCtx.String(RollupConfigPath.Name)

@@ -6,6 +6,7 @@ run:
 	docker compose build
 	rm -rf ./geth-data
 	cp -R ./geth-data-archive ./geth-data
+	docker run -v $$(pwd):/data -v $$(pwd)/config:/config --entrypoint geth us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101503.1 init --datadir=/data/geth-data --state.scheme=hash /config/genesis.json
 	docker compose up	-d
 	docker compose logs -f replayor
 

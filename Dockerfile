@@ -5,7 +5,8 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY ./packages ./packages
+COPY ./cmd ./cmd
 RUN go build -o bin/replayor ./cmd/replayor/main.go
 
 WORKDIR /app

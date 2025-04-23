@@ -208,18 +208,13 @@ func (s *StressTest) prepareDeployErc20(input *types.Block) (*types.Transaction,
 	s.logger.Info("Preparing tx to deploy ERC20 contract...")
 	gasUsed := int64(2_000_000)
 
-	maxFeePerGas := input.Transactions()[1].GasFeeCap()
-	oneHundredTen := big.NewInt(150)
-	maxFeePerGas.Mul(maxFeePerGas, oneHundredTen)
-	maxFeePerGas.Div(maxFeePerGas, big.NewInt(100))
-
 	nonceMu.Lock()
 	nonce := nonces[0]
 	txn := types.NewTx(&types.DynamicFeeTx{
 		Nonce:     nonce,
 		Value:     big.NewInt(0),
 		Gas:       uint64(gasUsed),
-		GasTipCap: input.Transactions()[1].GasTipCap(),
+		GasTipCap: big.NewInt(1),
 		GasFeeCap: big.NewInt(999_999_999_999),
 		Data:      common.Hex2Bytes(ERC20Bytecode),
 	})
