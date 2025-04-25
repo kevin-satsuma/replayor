@@ -108,8 +108,8 @@ func (r *Benchmark) addBlock(ctx context.Context, currentBlock strategies.BlockC
 	stats := stats.BlockCreationStats{}
 
 	txns := currentBlock.Transactions
-
 	stats.TxnCount = len(txns)
+	stats.GasLimit = uint64(*currentBlock.GasLimit)
 
 	state := &eth.ForkchoiceState{
 		HeadBlockHash:      r.previousReplayedBlockHash,
@@ -124,7 +124,6 @@ func (r *Benchmark) addBlock(ctx context.Context, currentBlock strategies.BlockC
 			panic(err)
 		}
 		txnData[i] = data
-		stats.GasLimit += txn.Gas()
 	}
 
 	attrs := &eth.PayloadAttributes{
